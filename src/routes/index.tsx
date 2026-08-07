@@ -1,192 +1,37 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight, Download, Github, Linkedin, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { submitFeedback } from "@/lib/feedback.functions";
-
-const FORM_LINK = "https://jawepah.app.n8n.cloud/form/f7f83134-926f-4be1-8fcd-ed25877114ed";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Share Your Feedback | PlusOne" },
-      {
-        name: "description",
-        content:
-          "Tell us what's working and what isn't. Send your name, phone, email and feedback straight to our team.",
-      },
-      { property: "og:title", content: "Share Your Feedback | PlusOne" },
-      {
-        property: "og:description",
-        content:
-          "Tell us what's working and what isn't. Send your name, phone, email and feedback straight to our team.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
-  component: Index,
+  head: () => ({ meta: [
+    { title: "Sateesh Kumar Singh | Agentic AI Leader" },
+    { name: "description", content: "Portfolio of Sateesh Kumar Singh, Principal Consultant and Agentic AI leader with 20+ years in AI, data and cloud architecture." },
+    { property: "og:title", content: "Sateesh Kumar Singh | Agentic AI Leader" },
+    { property: "og:description", content: "Principal Consultant delivering enterprise Agentic AI, GenAI, data and cloud platforms." },
+    { property: "og:type", content: "profile" }, { name: "twitter:card", content: "summary_large_image" },
+  ] }),
+  component: Home,
 });
 
-type Errors = Partial<Record<"fullName" | "phone" | "email" | "feedback", string>>;
-
-function Index() {
-  const send = useServerFn(submitFeedback);
-  const [values, setValues] = useState({ fullName: "", phone: "", email: "", feedback: "" });
-  const [errors, setErrors] = useState<Errors>({});
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const [message, setMessage] = useState("");
-
-  const set = (key: keyof typeof values) => (v: string) =>
-    setValues((prev) => ({ ...prev, [key]: v }));
-
-  function validate(): boolean {
-    const next: Errors = {};
-    if (values.fullName.trim().length < 2) next.fullName = "Please enter your full name";
-    if (!/^[+()\-\s0-9]{7,20}$/.test(values.phone.trim()))
-      next.phone = "Please enter a valid phone / mobile number";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim()))
-      next.email = "Please enter a valid email address";
-    if (values.feedback.trim().length < 5) next.feedback = "Please share a bit more";
-    setErrors(next);
-    return Object.keys(next).length === 0;
-  }
-
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!validate()) return;
-    setStatus("sending");
-    setMessage("");
-    try {
-      const result = await send({
-        data: {
-          fullName: values.fullName.trim(),
-          phone: values.phone.trim(),
-          email: values.email.trim(),
-          feedback: values.feedback.trim(),
-        },
-      });
-      if (result.ok) {
-        setStatus("sent");
-        setValues({ fullName: "", phone: "", email: "", feedback: "" });
-      } else {
-        setStatus("error");
-        setMessage(result.error);
-      }
-    } catch {
-      setStatus("error");
-      setMessage("Something went wrong. Please try again.");
-    }
-  }
-
-  return (
-    <main className="min-h-screen bg-background px-4 py-12">
-      <div className="mx-auto w-full max-w-xl">
-        <header className="mb-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            We're listening
-          </p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Share your feedback
-          </h1>
-          <p className="mt-3 text-sm text-muted-foreground">
-            Fill in the form below and it goes straight to our team. Prefer the hosted version?{" "}
-            <a
-              href={FORM_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-primary underline underline-offset-4"
-            >
-              Open the feedback form
-            </a>
-            .
-          </p>
-        </header>
-
-        <form
-          onSubmit={onSubmit}
-          className="space-y-5 rounded-xl border border-border bg-card p-6 shadow-sm"
-          noValidate
-        >
-          <div className="space-y-2">
-            <Label htmlFor="fullName">Your full name</Label>
-            <Input
-              id="fullName"
-              name="fullName"
-              autoComplete="name"
-              maxLength={100}
-              value={values.fullName}
-              onChange={(e) => set("fullName")(e.target.value)}
-              placeholder="Jane Doe"
-            />
-            {errors.fullName && <p className="text-sm text-destructive">{errors.fullName}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="phone">Your phone / mobile no</Label>
-            <Input
-              id="phone"
-              name="phone"
-              type="tel"
-              inputMode="tel"
-              autoComplete="tel"
-              maxLength={20}
-              value={values.phone}
-              onChange={(e) => set("phone")(e.target.value)}
-              placeholder="+91 98765 43210"
-            />
-            {errors.phone && <p className="text-sm text-destructive">{errors.phone}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="email">Your correct email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              autoComplete="email"
-              maxLength={255}
-              value={values.email}
-              onChange={(e) => set("email")(e.target.value)}
-              placeholder="jane@example.com"
-            />
-            {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="feedback">What's your feedback</Label>
-            <Textarea
-              id="feedback"
-              name="feedback"
-              rows={5}
-              maxLength={2000}
-              value={values.feedback}
-              onChange={(e) => set("feedback")(e.target.value)}
-              placeholder="Tell us what you think..."
-            />
-            {errors.feedback && <p className="text-sm text-destructive">{errors.feedback}</p>}
-          </div>
-
-          <Button type="submit" className="w-full" disabled={status === "sending"}>
-            {status === "sending" ? "Sending..." : "Send feedback"}
-          </Button>
-
-          {status === "sent" && (
-            <p className="text-sm font-medium text-primary" role="status">
-              Thanks! Your feedback has been sent.
-            </p>
-          )}
-          {status === "error" && (
-            <p className="text-sm text-destructive" role="alert">
-              {message}
-            </p>
-          )}
-        </form>
+function Home() {
+  return <>
+    <section className="section-container grid min-h-[calc(100vh-4rem)] items-center gap-12 py-16 lg:grid-cols-[1fr_360px]">
+      <div>
+        <p className="mb-5 text-sm font-bold uppercase text-primary">Principal Consultant · Agentic AI Leader</p>
+        <h1 className="max-w-4xl text-5xl font-bold leading-tight sm:text-7xl">Sateesh Kumar Singh</h1>
+        <p className="mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">AI, GenAI, Data Science and Enterprise Architecture — 20+ years shipping production-grade intelligent systems for banking, automotive and healthcare.</p>
+        <div className="mt-8 flex flex-wrap gap-3"><Button asChild><Link to="/projects">View projects <ArrowRight /></Link></Button><Button asChild variant="outline"><Link to="/contact"><Mail /> Contact me</Link></Button><Button asChild variant="secondary"><a href="/Sateesh_Singh.pdf" download><Download /> Download CV</a></Button></div>
+        <ul className="mt-10 grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
+          <li className="flex items-center gap-2"><Phone className="size-4 text-primary" /> +91 99200 74439</li><li className="flex items-center gap-2"><MapPin className="size-4 text-primary" /> Mumbai, India</li><li><a className="flex items-center gap-2 hover:text-primary" href="mailto:sateesh.singh76@gmail.com"><Mail className="size-4 text-primary" /> sateesh.singh76@gmail.com</a></li><li><a className="flex items-center gap-2 hover:text-primary" href="https://wa.me/919920074439"><MessageCircle className="size-4 text-primary" /> WhatsApp</a></li>
+        </ul>
       </div>
-    </main>
-  );
+      <div className="mx-auto w-full max-w-sm">
+        <img src="/images/sateesh-profile.jpg" alt="Sateesh Kumar Singh" width="704" height="704" className="aspect-square w-full rounded-md border border-border object-cover object-top shadow-2xl" />
+        <div className="mt-4 flex items-center justify-between"><p className="text-sm font-semibold">20+ years of experience</p><div className="flex gap-2"><Button asChild variant="outline" size="icon"><a href="https://www.linkedin.com/in/sateesh-singh-2224b666/" aria-label="LinkedIn"><Linkedin /></a></Button><Button asChild variant="outline" size="icon"><a href="https://github.com/sateesh1976/" aria-label="GitHub"><Github /></a></Button></div></div>
+      </div>
+    </section>
+    <section className="border-y border-border bg-secondary/40 py-16"><div className="section-container grid gap-8 sm:grid-cols-3">{[["20+", "Years experience"], ["6", "Global industries"], ["3", "Major cloud platforms"]].map(([value, label]) => <div key={label}><p className="text-4xl font-bold text-primary">{value}</p><p className="mt-2 text-muted-foreground">{label}</p></div>)}</div></section>
+    <section className="section-container py-20"><p className="text-sm font-bold uppercase text-primary">Executive profile</p><h2 className="mt-3 max-w-3xl text-3xl font-bold sm:text-4xl">Turning ambitious AI strategies into durable enterprise systems.</h2><p className="mt-6 max-w-3xl text-lg leading-8 text-muted-foreground">I lead architecture and delivery across agentic AI, machine learning, data engineering and multi-cloud platforms—with a focus on measurable outcomes, governance and production reliability.</p></section>
+  </>;
 }

@@ -41,10 +41,15 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Add GitHub Pages compatibility files
+        run: |
+          touch dist/client/.nojekyll
+          cp dist/client/index.html dist/client/404.html
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: dist
+          path: dist/client
 
       - name: Deploy to GitHub Pages
         id: deployment-primary
