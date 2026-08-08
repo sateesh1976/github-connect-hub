@@ -54,9 +54,10 @@ function parseCsv(input: string): string[][] {
 }
 
 function toKnowledgeText(rows: string[][]): string {
-  if (rows.length === 0) return "";
   const [header, ...body] = rows;
+  if (!header) return "";
   const headers = header.map((h) => h.trim());
+
 
   return body
     .map((cells) =>
