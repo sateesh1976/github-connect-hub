@@ -2,6 +2,8 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { Menu, Moon, Sun, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
+import { ChatWidget } from "@/components/chat-widget";
+import { FeedbackDialog } from "@/components/feedback-dialog";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
