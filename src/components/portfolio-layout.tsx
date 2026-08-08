@@ -2,6 +2,8 @@ import { Link, useLocation } from "@tanstack/react-router";
 import { Menu, Moon, Sun, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 
+import { ChatWidget } from "@/components/chat-widget";
+import { FeedbackDialog } from "@/components/feedback-dialog";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -61,7 +63,9 @@ export function PortfolioLayout({ children }: { children: ReactNode }) {
           <div className="flex gap-4"><a href="mailto:sateesh.singh76@gmail.com" className="hover:text-primary">Email</a><a href="https://www.linkedin.com/in/sateesh-singh-2224b666/" target="_blank" rel="noreferrer" className="hover:text-primary">LinkedIn</a><a href="https://github.com/sateesh1976/" target="_blank" rel="noreferrer" className="hover:text-primary">GitHub</a></div>
         </div>
       </footer>
-      <a href="https://jawepah.app.n8n.cloud/form/f7f83134-926f-4be1-8fcd-ed25877114ed" target="_blank" rel="noreferrer" className="fixed bottom-5 right-5 z-40 rounded-md bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-lg">Feedback</a>
+      <FeedbackDialog />
+      <ChatWidget />
+
     </div>
   );
 }
