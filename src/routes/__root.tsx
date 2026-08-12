@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import { PortfolioLayout } from "@/components/portfolio-layout";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { installClientErrorLogging, reportClientError } from "../lib/client-error-logging";
 
 function NotFoundComponent() {
   return (
@@ -40,6 +41,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    reportClientError(error, "react_error_boundary");
   }, [error]);
 
   return (
@@ -119,6 +121,9 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useEffect(() => {
+    installClientErrorLogging();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

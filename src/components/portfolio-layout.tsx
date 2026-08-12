@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 
 import { ChatWidget } from "@/components/chat-widget";
 import { FeedbackDialog } from "@/components/feedback-dialog";
+import { NewsletterSignup } from "@/components/newsletter-signup";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -58,6 +59,7 @@ export function PortfolioLayout({ children }: { children: ReactNode }) {
       </header>
       <main id="content" className="pt-16">{children}</main>
       <footer className="border-t border-border py-8">
+        <div className="section-container mb-8"><NewsletterSignup /></div>
         <div className="section-container flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 Sateesh Kumar Singh. Built for meaningful technology outcomes.</p>
           <div className="flex gap-4"><a href="mailto:sateesh.singh76@gmail.com" className="hover:text-primary">Email</a><a href="https://www.linkedin.com/in/sateesh-singh-2224b666/" target="_blank" rel="noreferrer" className="hover:text-primary">LinkedIn</a><a href="https://github.com/sateesh1976/" target="_blank" rel="noreferrer" className="hover:text-primary">GitHub</a></div>
