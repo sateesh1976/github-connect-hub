@@ -12,3 +12,6 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /unsubscribe
+
+Sitemap: https://sateesh-singh.lovable.app/sitemap.xml

@@ -72,7 +72,7 @@ export function ChatWidget() {
   }, []);
 
   const send = useCallback(
-    async (raw: string) => {
+    async (raw: string, fromVoice = false) => {
       const text = raw.trim();
       if (!text || sendingRef.current) return;
       sendingRef.current = true;
@@ -87,7 +87,7 @@ export function ChatWidget() {
         const result = await ask({ data: { messages: history.slice(-20) } });
         if (result.ok) {
           setMessages((prev) => [...prev, { role: "assistant", content: result.reply }]);
-          if (voiceOn) speak(result.reply);
+          if (voiceOn || fromVoice) speak(result.reply);
         } else {
           setError(result.error);
         }
@@ -118,7 +118,7 @@ export function ChatWidget() {
     recognition.continuous = false;
     recognition.onresult = (event) => {
       const transcript = event.results[0]?.[0]?.transcript ?? "";
-      if (transcript) void send(transcript);
+      if (transcript) void send(transcript, true);
     };
     recognition.onerror = (event) => {
       setListening(false);
